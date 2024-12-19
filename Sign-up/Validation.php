@@ -11,7 +11,7 @@ if ($_POST['password'] != $_POST['verification'])
 {
     session_start();
     $_SESSION['error'] = 'error';
-    redirect('signup.php'); //this is like calling the whole php code in the other page normal lol
+    redirect('signup.php'); 
     // var_dump($_SESSION);
 }
 include '../access.php';
@@ -24,6 +24,7 @@ if(!filter_var($email, FILTER_VALIDATE_EMAIL))
 {
     session_start();
     $_SESSION['invalidmail'] = 1;
+    // echo '!filter_var($email, FILTER_VALIDATE_EMAIL';
     redirect('signup.php');
 }
 $stmnt = $connect->prepare('INSERT INTO users (name, mail, password, role_id) VALUES ((?), (?), (?), (?))');

@@ -1,11 +1,12 @@
 <?php
 include '../access.php';
-// var_dump($_POST);
+var_dump($_POST);
 function redirect($path)
 {
     header("location: $path");
     exit();
 }
+// var_dump($_POST);
 $email = $_POST['email'];
 
 $stmnt = $connect->prepare("SELECT password FROM users WHERE mail = (?)");
@@ -21,10 +22,21 @@ if (!$row)
 }
 if (password_verify($_POST['password'], $row['password']))
 {
-    echo "connected";
+    session_start();
+    $_SESSION['connected'] = 1;
+    $stmnt = "SELECT role_id from users WHERE mail= (?);";
+    $stmnt = $connect->prepare($stmnt);
+    $stmnt->bind_param("s", $email);
+    $stmnt->execute();
+    $result = $stmnt->get_result();
+    $row = $result->fetch_assoc();
+    $_SESSION['role'] = $row['role_id'];
+    redirect('../dashboard/dashboard.php');
 }
 else
 {
-    echo "incorrect pass";
+    session_start();
+    $_SESSION['incorrectpassword'] = 1;
+    redirect('login.php');
 }
 ?>
