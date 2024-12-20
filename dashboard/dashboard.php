@@ -5,8 +5,9 @@ function redirect($path)
     header("location: $path");
     exit();
 }
-if ($_SESSION['role'] === 4)
+switch ($_SESSION['role'])
 {
-  redirect('../index.php');
-};
+  case '1':
+    redirect('http://localhost:8000/dashboard/admin/admindash.php');
+}
 ?>

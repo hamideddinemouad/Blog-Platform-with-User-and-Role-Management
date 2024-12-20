@@ -24,13 +24,15 @@ if (password_verify($_POST['password'], $row['password']))
 {
     session_start();
     $_SESSION['connected'] = 1;
-    $stmnt = "SELECT role_id from users WHERE mail= (?);";
+    $stmnt = "SELECT role_id, name from users WHERE mail= (?);";
     $stmnt = $connect->prepare($stmnt);
     $stmnt->bind_param("s", $email);
     $stmnt->execute();
     $result = $stmnt->get_result();
     $row = $result->fetch_assoc();
     $_SESSION['role'] = $row['role_id'];
+    $_SESSION['username'] = $row['name'];
+    // $_SESSION['userDbId'] = $row['id'];
     redirect('../dashboard/dashboard.php');
 }
 else

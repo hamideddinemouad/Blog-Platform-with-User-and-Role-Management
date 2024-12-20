@@ -6,9 +6,9 @@ function redirect($path)
 }
 function isconnected()
 {
-    if (isset($_SESSION['connected']))
+    if (isset($_SESSION['connected']) && $_SESSION['role'] === 4)
     {
-        redirect("../dashboard/dashboard.php");
+        redirect("../index.php");
     }
 }
 function login_errors()
