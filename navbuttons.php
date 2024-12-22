@@ -39,7 +39,7 @@ function navbuttons()
         </li>
         ";
         }
-        logOutButton("/logout/logout.php");
+        logOutButton("http://localhost:8000/logout/logout.php");
     }
 }
 ?>

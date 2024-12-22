@@ -44,7 +44,23 @@ session_start();
     <div style="background-image: url('images/header.jpg'); width:100vw; height:70vh" class="flex items-center justify-center text-7xl">
         <h1 class="">Where Your Ideas Come to life</h1>
     </div>
-    <h1 class="divide-gray-900 text-5xl text-center">Featured Articles</h1>
+    <h2 class="p-10 text-center text-4xl"> Tags</h2>
+    <section class='flex justify-between flex-wrap items-center h-16 px-4 bg-gray-200 border-b-2 border-gray-300'>
+
+    <?php include 'access.php';
+    $tagsTable = $connect->query("SELECT  * from tags");
+    $row = $tagsTable->fetch_assoc();
+    while ($row)
+    {
+    $tagName = $row['name'];
+    echo 
+    "
+    <a href='http://localhost:8000/Articles/articles.php/?tag=$tagName' class='text-xl text-blue-600 hover:text-red-600 hover:scale-110 transition-all duration-500'>$tagName</a>
+    ";
+    $row = $tagsTable->fetch_assoc();
+    }
+  ?>
+  </section>
 </main>
 </body>
 </html>

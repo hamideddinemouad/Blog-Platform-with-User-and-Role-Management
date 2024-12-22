@@ -1,5 +1,61 @@
 <?php
-session_start();
+
+session_start(); 
+function queryFast($connection, $stmnt, $binding = NULL, $param=[])
+{
+    if (empty($param) || !$binding)
+    {
+        $stmnt = $connection->prepare($stmnt);
+        $stmnt->execute();
+        return $stmnt;
+    }
+    $stmnt = $connection->prepare($stmnt);
+    $values = implode(",", $param);
+    $stmnt->bind_param($binding, $values);
+    $stmnt->execute();
+    return $stmnt;
+}
+function bringUserName($connection, $userId)
+{
+    $stmnt = "SELECT name FROM users WHERE id = (?)";
+    $response = queryFast($connection, $stmnt, "s", [$userId]);
+    $result = $response->get_result();
+    $row = $result->fetch_assoc();
+    return $row['name'];
+}
+function renderComments($connection)
+{
+    $stmnt = "SELECT * FROM comments";
+    $response = queryFast($connection, $stmnt);
+    $result = $response->get_result();
+    $row = $result->fetch_assoc();
+    $comments = '';
+    while ($row)
+    {
+        $commentOwner = bringUserName($connection, $row['user_id']);
+        $content = $row['content'];
+        $commentId = $row['id'];
+        $comments .=         "
+        <div class='space-y-6 mt-4'>
+        <div class='bg-gray-50 p-4 rounded-lg'>
+            <p class='font-semibold text-gray-800'>$commentOwner</p>
+            <p class='text-gray-600 mt-2'>$content</p>
+                        <form action='form-handler.php' method='post' class='inline'>
+                <input type='hidden' name='formtype' value='deletecomment'>
+                <input type='hidden' name='commenttodelete' value='$commentId'>
+                <button
+                    type='submit'
+                    class='bg-red-600 text-white text-sm font-semibold rounded-md px-4 py-2 hover:bg-red-700'>
+                    Delete comment
+                </button>
+            </form>
+        </div>    
+        </div>
+        ";
+        $row = $result->fetch_assoc();
+    }
+    return $comments;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,8 +64,8 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-  <script src="http://localhost:8000/dashboard/admin/script.js" defer></script>
-  <title>Dashboard</title>
+  <script src="script.js" defer></script>
+  <title>Dashboard editor</title>
 </head>
 
 <body>
@@ -48,21 +104,19 @@ session_start();
         $name = $_SESSION['username'];
         echo "<li class='cursor-pointer hover:text-white text-2xl'>Hello $name </li>";
         ?>
-        <li id="showUsers" class="cursor-pointer hover:text-white">Users</li>
-        <li id="showTags" class="cursor-pointer hover:text-white">Tags</li>
+        <li id="showUsers" class="cursor-pointer hover:text-white">comments</li>
       </ul>
     </div>
     <div class="overflow-y-scroll w-3/4 h-auto bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 p-6 rounded-xl shadow-xl flex flex-col gap-16">
 
       <div id="details" class="hidden flex flex-col md:gap-2">
         <h1 class="text-xl">Users and roles</h1>
-        <?php include 'adminfunctions.php';
+        <?php 
         include '../../access.php';
-        show_users($connect);
+        $comments = renderComments($connect);
+        echo $comments;
         ?>
-      </div>
-      <?php include 'tags.php'
-      ?>
+
     </div>
   </main>
 </body>

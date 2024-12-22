@@ -1,0 +1,12 @@
+<div class='mt-10'>
+    <h3 class='text-xl font-semibold text-gray-800'>Leave a Comment</h3>
+    <form action='comments.php' method='POST' class='mt-4'>
+        <input type='hidden' name='addcomment', value=$articleId>
+        <input type='hidden' name='commentowner', value='$userid'>
+        <div class='mb-4'>
+            <label for='comment' class='block text-gray-700'>Comment:</label>
+            <textarea id='comment' name='comment' rows='1' required class='w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent'></textarea>
+        </div>
+        <button type='submit' class='w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'>Submit</button>
+    </form>
+</div>

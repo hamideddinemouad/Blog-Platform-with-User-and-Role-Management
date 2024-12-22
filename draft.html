@@ -1,0 +1,17 @@
+
+<ul class='flex flex-col  justify-between items-center gap-4 p-4 bg-gray-100 rounded-lg shadow-lg'>
+    <li class='text-lg font-semibold text-gray-800'>
+        <span class='block md:inline'>comments</span>
+    </li>
+    <li class='flex flex-col md:flex-row items-center gap-4'>
+        <form action='form-handler.php' method='post' class='inline'>
+            <input type='hidden' name='formtype' value='deletetag'>
+            <input type='hidden' name='tagtodelete' value=''>
+            <button
+                type='submit'
+                class='bg-red-600 text-white text-sm font-semibold rounded-md px-4 py-2 hover:bg-red-700'>
+                Delete comment
+            </button>
+        </form>
+    </li>
+</ul>

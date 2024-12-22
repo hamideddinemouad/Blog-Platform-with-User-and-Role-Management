@@ -1,19 +1,5 @@
-<?php
-session_start();
-?>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-  <script src="http://localhost:8000/dashboard/admin/script.js" defer></script>
-  <title>Dashboard</title>
-</head>
-
-<body>
-  <header>
+<header>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="index.php" class="flex items-center space-x-3 rtl:space-x-reverse">
@@ -33,7 +19,7 @@ session_start();
               <a href="http://localhost:8000/index.php" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
             </li>
             <?php
-            include '../../navbuttons.php';
+            include '../navbuttons.php';
             navbuttons();
             ?>
           </ul>
@@ -41,30 +27,3 @@ session_start();
       </div>
     </nav>
   </header>
-  <main class="text-center w-screen  h-screen flex ">
-    <div id="options" class="text-center w-1/4 bg-amber-200">
-      <ul class="flex flex-col justify-around h-3/4 py-10">
-        <?php
-        $name = $_SESSION['username'];
-        echo "<li class='cursor-pointer hover:text-white text-2xl'>Hello $name </li>";
-        ?>
-        <li id="showUsers" class="cursor-pointer hover:text-white">Users</li>
-        <li id="showTags" class="cursor-pointer hover:text-white">Tags</li>
-      </ul>
-    </div>
-    <div class="overflow-y-scroll w-3/4 h-auto bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 p-6 rounded-xl shadow-xl flex flex-col gap-16">
-
-      <div id="details" class="hidden flex flex-col md:gap-2">
-        <h1 class="text-xl">Users and roles</h1>
-        <?php include 'adminfunctions.php';
-        include '../../access.php';
-        show_users($connect);
-        ?>
-      </div>
-      <?php include 'tags.php'
-      ?>
-    </div>
-  </main>
-</body>
-
-</html>
